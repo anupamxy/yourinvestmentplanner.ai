@@ -4,24 +4,135 @@
 
 @layer base {
   * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
   body {
     margin: 0;
     font-family: system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
-    background: #f8fafc;
-    color: #1e293b;
+    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+    transition: background-color 0.3s, color 0.3s;
   }
+
   #root { min-height: 100vh; }
 }
 
 @layer components {
-  .btn-primary { @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed; }
-  .btn-secondary { @apply bg-white hover:bg-gray-50 text-gray-700 font-semibold py-2 px-4 rounded-lg border border-gray-300 transition-colors; }
-  .card { @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6; }
-  .input { @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent; }
-  .label { @apply block text-sm font-medium text-gray-700 mb-1; }
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg
+           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+           shadow-sm hover:shadow-md active:scale-95;
+  }
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-gray-700 font-semibold py-2 px-4 rounded-lg
+           border border-gray-300 transition-all duration-200
+           dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-600;
+  }
+  .btn-danger {
+    @apply bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold
+           py-2 px-3 rounded-lg text-sm transition-all duration-200
+           dark:bg-red-950 dark:hover:bg-red-900 dark:text-red-400 dark:border-red-800;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6
+           dark:bg-slate-900 dark:border-slate-700/60;
+  }
+  .card-dark {
+    @apply bg-slate-900 rounded-xl border border-slate-700/60 p-6;
+  }
+
+  /* ── Form inputs ── */
+  .input {
+    @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
+           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+           dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100
+           dark:focus:ring-blue-400 dark:placeholder-slate-400;
+  }
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1 dark:text-slate-300;
+  }
 }
 
+/* ── Keyframe animations ── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+  50%       { box-shadow: 0 0 0 6px rgba(59,130,246,0.15); }
+}
+@keyframes slide-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes agent-enter {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes progress-stripe {
+  0%   { background-position: 0 0; }
+  100% { background-position: 40px 0; }
+}
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%            { transform: scale(1);   opacity: 1;   }
+}
+@keyframes check-pop {
+  0%   { transform: scale(0); opacity: 0; }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* ── Utility animation classes ── */
+.animate-slide-up      { animation: slide-in-up 0.35s ease both; }
+.animate-agent-enter   { animation: agent-enter 0.4s ease both; }
+.animate-pulse-glow    { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-check-pop     { animation: check-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* Shimmer loading bar */
+.shimmer {
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+.dark .shimmer {
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
+  background-size: 200% 100%;
+}
+
+/* Animated striped progress bar */
+.progress-stripe {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.15) 0px,
+    rgba(255,255,255,0.15) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  animation: progress-stripe 0.8s linear infinite;
+}
+
+/* Typing dots */
+.dot-bounce { animation: dot-bounce 1.4s ease-in-out infinite; }
+.dot-bounce:nth-child(2) { animation-delay: 0.2s; }
+.dot-bounce:nth-child(3) { animation-delay: 0.4s; }
+
+/* SSE log ticker */
+.ticker-track { animation: ticker-scroll 20s linear infinite; }
+.ticker-track:hover { animation-play-state: paused; }
+
+/* Report markdown */
 .report-content h1 { font-size:1.5rem; font-weight:700; margin-bottom:1rem; color:#111827; }
 .report-content h2 { font-size:1.25rem; font-weight:600; margin:1.5rem 0 0.75rem; color:#1f2937; border-bottom:1px solid #e5e7eb; padding-bottom:0.5rem; }
 .report-content h3 { font-size:1.1rem; font-weight:600; margin:1rem 0 0.5rem; color:#374151; }
@@ -34,3 +145,13 @@
 .report-content th { background:#f9fafb; border:1px solid #d1d5db; padding:0.5rem 0.75rem; text-align:left; font-weight:600; color:#374151; }
 .report-content td { border:1px solid #d1d5db; padding:0.5rem 0.75rem; color:#4b5563; }
 .report-content blockquote { border-left:4px solid #3b82f6; padding-left:1rem; font-style:italic; color:#6b7280; margin:0.75rem 0; }
+
+/* Dark mode report */
+.dark .report-content h1  { color:#f1f5f9; }
+.dark .report-content h2  { color:#e2e8f0; border-color:#334155; }
+.dark .report-content h3  { color:#cbd5e1; }
+.dark .report-content p,
+.dark .report-content li  { color:#94a3b8; }
+.dark .report-content strong { color:#e2e8f0; }
+.dark .report-content th  { background:#1e293b; border-color:#334155; color:#cbd5e1; }
+.dark .report-content td  { border-color:#334155; color:#94a3b8; }

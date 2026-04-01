@@ -36,10 +36,14 @@ class MemoryAgent(BaseAgent):
             )
 
         except Exception as e:
-            context.errors.append(f"MemoryAgent error: {str(e)}")
+            # Non-fatal — pipeline continues with empty memory context
             context.memory_context = []
             duration = int((time.time() - t0) * 1000)
-            self._log_step(context, 'error', {'error': str(e)}, duration)
+            self._log_step(
+                context, 'done',
+                {'memories_retrieved': 0, 'note': f'Memory unavailable: {str(e)[:120]}'},
+                duration,
+            )
 
         return context
 

@@ -111,6 +111,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 
 # --- External APIs ---
 HUGGINGFACE_API_KEY = config('HUGGINGFACE_API_KEY', default='')
+GROQ_API_KEY = config('GROQ_API_KEY', default='')
 ALPHA_VANTAGE_API_KEY = config('ALPHA_VANTAGE_API_KEY', default='')
 
 # --- ChromaDB ---
