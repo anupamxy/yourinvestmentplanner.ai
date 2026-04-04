@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import Layout from '../components/layout/Layout';
 import ReportViewer from '../components/reports/ReportViewer';
+import ReportQA from '../components/reports/ReportQA';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import { reportApi } from '../api/reportApi';
 
@@ -30,7 +31,7 @@ export default function ReportPage() {
     <Layout>
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <Link to="/dashboard" className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors">
+          <Link to="/dashboard" className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-white transition-colors">
             <ArrowLeft size={16} /> Back to Dashboard
           </Link>
           {report && (
@@ -49,7 +50,10 @@ export default function ReportPage() {
             <LoadingSpinner text="Loading report..." />
           </div>
         ) : (
-          <ReportViewer report={report} />
+          <>
+            <ReportViewer report={report} />
+            <ReportQA reportId={id} />
+          </>
         )}
       </div>
     </Layout>

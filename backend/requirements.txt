@@ -12,3 +12,12 @@ python-decouple==3.8
 django-extensions==3.2.3
 channels==4.1.0
 daphne==4.1.2
+
+# Production
+psycopg2-binary==2.9.9
+dj-database-url==2.2.0
+whitenoise==6.7.0
+gunicorn==22.0.0
+# LangChain Q&A
+langchain-groq==1.1.2
+langchain-core==1.2.25

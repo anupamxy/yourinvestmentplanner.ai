@@ -18,19 +18,23 @@ class AnalysisAgent(BaseAgent):
             risk = profile.get('risk_tolerance', 'moderate')
             budget = float(profile.get('budget', 10000))
             horizon = profile.get('time_horizon', 'medium')
+            currency = profile.get('currency', 'USD')
+            market = context.market_data.get('market', 'NYSE/NASDAQ')
             quotes = context.market_data.get('quotes', {})
             news = context.market_data.get('news_sentiment', {})
 
             scored = self._score_tickers(quotes, news, risk)
             top_picks = sorted(scored, key=lambda x: x['score'], reverse=True)[:5]
-            allocations = self._allocate_budget(top_picks, budget, risk)
+            allocations = self._allocate_budget(top_picks, budget, risk, currency)
 
             context.analysis = {
                 'top_picks': top_picks,
                 'allocations': allocations,
-                'risk_summary': self._build_risk_summary(risk, horizon),
+                'risk_summary': self._build_risk_summary(risk, horizon, market),
                 'total_tickers_evaluated': len(scored),
                 'budget': budget,
+                'currency': currency,
+                'market': market,
             }
 
             duration = int((time.time() - t0) * 1000)
@@ -74,14 +78,12 @@ class AnalysisAgent(BaseAgent):
 
         return scored
 
-    def _allocate_budget(self, top_picks: list, budget: float, risk: str) -> dict:
+    def _allocate_budget(self, top_picks: list, budget: float, risk: str, currency: str = 'USD') -> dict:
         if not top_picks:
             return {}
         if risk == 'conservative':
-            # Top pick gets more weight
             weights = [0.35, 0.25, 0.20, 0.12, 0.08]
         elif risk == 'aggressive':
-            # More concentrated in top picks
             weights = [0.40, 0.30, 0.15, 0.10, 0.05]
         else:
             weights = [0.30, 0.25, 0.20, 0.15, 0.10]
@@ -91,25 +93,46 @@ class AnalysisAgent(BaseAgent):
             w = weights[i] if i < len(weights) else 0
             allocations[pick['ticker']] = {
                 'weight': w,
-                'amount_usd': round(budget * w, 2),
+                'amount': round(budget * w, 2),
+                'currency': currency,
                 'score': pick['score'],
             }
         return allocations
 
-    def _build_risk_summary(self, risk: str, horizon: str) -> dict:
+    def _build_risk_summary(self, risk: str, horizon: str, market: str = 'NYSE/NASDAQ') -> dict:
+        is_india = 'NSE' in market
+
         summaries = {
-            'conservative': 'Low risk. Focus on blue-chip, dividend-paying stocks with stable earnings.',
-            'moderate': 'Balanced risk. Mix of growth and value stocks across diversified sectors.',
-            'aggressive': 'High risk / high reward. Growth-oriented, may include volatile tech and emerging sectors.',
+            'conservative': (
+                'Low risk. Focus on large-cap Nifty 50 stocks, PSU banks, and dividend-paying blue chips.'
+                if is_india else
+                'Low risk. Focus on blue-chip, dividend-paying stocks with stable earnings.'
+            ),
+            'moderate': (
+                'Balanced risk. Mix of Nifty 50 leaders and mid-cap growth stocks across sectors.'
+                if is_india else
+                'Balanced risk. Mix of growth and value stocks across diversified sectors.'
+            ),
+            'aggressive': (
+                'High risk / high reward. Growth-oriented — includes mid/small-cap NSE stocks and emerging sectors like EV, renewables, and fintech.'
+                if is_india else
+                'High risk / high reward. Growth-oriented, may include volatile tech and emerging sectors.'
+            ),
         }
         horizon_notes = {
             'short': 'Short time horizon — prioritize liquidity and avoid illiquid positions.',
             'medium': 'Medium horizon allows for some recovery from short-term volatility.',
             'long': 'Long horizon — can tolerate volatility for higher expected long-term returns.',
         }
+        market_note = (
+            'Data sourced from NSE (National Stock Exchange of India) via Yahoo Finance.'
+            if is_india else
+            'Data sourced from NYSE/NASDAQ via Alpha Vantage and Yahoo Finance.'
+        )
         return {
             'risk_description': summaries.get(risk, ''),
             'horizon_note': horizon_notes.get(horizon, ''),
+            'market_note': market_note,
         }
 
     def _extract_sentiment(self, news_data: dict) -> float:

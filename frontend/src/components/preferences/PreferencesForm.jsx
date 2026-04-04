@@ -139,11 +139,20 @@ export default function PreferencesForm({ onSaved }) {
             onChange={(e) => setForm((f) => ({ ...f, currency: e.target.value }))}
             className="input"
           >
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="GBP">GBP</option>
-            <option value="JPY">JPY</option>
+            <option value="USD">USD — US Dollar</option>
+            <option value="INR">INR — Indian Rupee ₹</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="GBP">GBP — British Pound</option>
+            <option value="JPY">JPY — Japanese Yen</option>
           </select>
+          {form.currency === 'INR' && (
+            <div className="mt-2 flex items-start gap-2 text-xs bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-lg px-3 py-2 text-orange-700 dark:text-orange-300">
+              <span className="text-base leading-none mt-0.5">🇮🇳</span>
+              <span>
+                <strong>Indian Market Mode:</strong> Analysis will use NSE-listed stocks (Nifty 50 companies) via Yahoo Finance. Recommendations will be in ₹ and include Indian market context — RBI policy, SEBI regulations, and tax implications (STCG/LTCG).
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
