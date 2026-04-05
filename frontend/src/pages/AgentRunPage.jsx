@@ -12,6 +12,10 @@ const HOW_IT_WORKS = [
   { Icon: Cpu,       color: 'text-orange-500', label: 'AI Report',    desc: 'Generates your full investment plan with Llama 3' },
 ];
 
+function currencySym(c) {
+  return c === 'INR' ? '₹' : c === 'EUR' ? '€' : c === 'GBP' ? '£' : '$';
+}
+
 export default function AgentRunPage() {
   const { profile, fetchProfile } = usePreferencesStore();
 
@@ -66,7 +70,7 @@ export default function AgentRunPage() {
                 Risk: <strong className="text-[var(--text-primary)] capitalize">{profile.risk_tolerance}</strong>
               </span>
               <span className="text-[var(--text-muted)]">
-                Budget: <strong className="text-[var(--text-primary)]">${parseFloat(profile.budget).toLocaleString()} {profile.currency}</strong>
+                Budget: <strong className="text-[var(--text-primary)]">{currencySym(profile.currency)}{parseFloat(profile.budget).toLocaleString()} {profile.currency}</strong>
               </span>
               <span className="text-[var(--text-muted)]">
                 Horizon: <strong className="text-[var(--text-primary)] capitalize">{profile.time_horizon}-term</strong>

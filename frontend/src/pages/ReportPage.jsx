@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, Trash2, Loader2 } from 'lucide-react';
 import Layout from '../components/layout/Layout';
 import ReportViewer from '../components/reports/ReportViewer';
 import ReportQA from '../components/reports/ReportQA';
@@ -8,16 +8,16 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import { reportApi } from '../api/reportApi';
 
 export default function ReportPage() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [report, setReport] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { id }    = useParams();
+  const navigate  = useNavigate();
+  const [report,   setReport]   = useState(null);
+  const [loading,  setLoading]  = useState(true);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     reportApi.get(id)
       .then(({ data }) => { setReport(data); setLoading(false); })
-      .catch(() => { navigate('/dashboard'); });
+      .catch(() => navigate('/dashboard'));
   }, [id]);
 
   const handleDelete = async () => {
@@ -29,25 +29,39 @@ export default function ReportPage() {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <Link to="/dashboard" className="flex items-center gap-2 text-sm text-[var(--text-muted)] dark:text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white transition-colors">
-            <ArrowLeft size={16} /> Back to Dashboard
+      <div className="max-w-4xl mx-auto space-y-1">
+
+        {/* Top bar */}
+        <div className="flex items-center justify-between py-2">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-1.5 text-[13px] text-[var(--text-muted)]
+                       hover:text-[var(--text-primary)] transition-colors group"
+          >
+            <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+            Back to Dashboard
           </Link>
+
           {report && (
             <button
               onClick={handleDelete}
               disabled={deleting}
-              className="flex items-center gap-1 text-sm text-red-400 hover:text-red-600 transition-colors"
+              className="flex items-center gap-1.5 text-[13px] font-medium
+                         text-[var(--text-muted)] hover:text-red-400
+                         transition-colors disabled:opacity-50"
             >
-              <Trash2 size={15} /> {deleting ? 'Deleting...' : 'Delete'}
+              {deleting
+                ? <Loader2 size={13} className="animate-spin" />
+                : <Trash2 size={13} />
+              }
+              {deleting ? 'Deleting…' : 'Delete Report'}
             </button>
           )}
         </div>
 
         {loading ? (
-          <div className="py-20 flex justify-center">
-            <LoadingSpinner text="Loading report..." />
+          <div className="py-24 flex justify-center">
+            <LoadingSpinner text="Loading report…" />
           </div>
         ) : (
           <>
