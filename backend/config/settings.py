@@ -9,6 +9,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -19,11 +20,16 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    # Channels
+    'channels',
     # Local apps
     'apps.users',
     'apps.agents',
     'apps.memory',
     'apps.reports',
+    'apps.life_advisor',
+    'apps.portfolio',
+    'apps.discussions',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +61,21 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION  = 'config.asgi.application'
+
+# --- Django Channels ---
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }
+}
+# For production with Redis, set REDIS_URL and uncomment:
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {'hosts': [config('REDIS_URL', default='redis://localhost:6379/1')]},
+#     }
+# }
 
 DATABASES = {
     'default': {

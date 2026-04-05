@@ -21,3 +21,4 @@ gunicorn==22.0.0
 # LangChain Q&A
 langchain-groq==1.1.2
 langchain-core==1.2.25
+duckduckgo-search

@@ -2,9 +2,9 @@ import Navbar from './Navbar';
 
 export default function Layout({ children }) {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col transition-colors duration-300">
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg-base)' }}>
       <Navbar />
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-5">
         {children}
       </main>
     </div>

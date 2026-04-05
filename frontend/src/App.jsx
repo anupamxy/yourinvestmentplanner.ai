@@ -8,6 +8,11 @@ import PreferencesPage from './pages/PreferencesPage';
 import AgentRunPage from './pages/AgentRunPage';
 import ReportPage from './pages/ReportPage';
 import HistoryPage from './pages/HistoryPage';
+import LifeProfilePage from './pages/LifeProfilePage';
+import LifeAdvisorPage from './pages/LifeAdvisorPage';
+import PortfolioPage from './pages/PortfolioPage';
+import DiscussionsPage from './pages/DiscussionsPage';
+import RoomPage from './pages/RoomPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
 function App() {
@@ -23,7 +28,12 @@ function App() {
         <Route path="/preferences" element={<ProtectedRoute><PreferencesPage /></ProtectedRoute>} />
         <Route path="/run"         element={<ProtectedRoute><AgentRunPage /></ProtectedRoute>} />
         <Route path="/reports/:id" element={<ProtectedRoute><ReportPage /></ProtectedRoute>} />
-        <Route path="/history"     element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
+        <Route path="/history"       element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
+        <Route path="/life-profile"  element={<ProtectedRoute><LifeProfilePage /></ProtectedRoute>} />
+        <Route path="/life-advisor"  element={<ProtectedRoute><LifeAdvisorPage /></ProtectedRoute>} />
+        <Route path="/portfolio"     element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />
+        <Route path="/discussions"   element={<ProtectedRoute><DiscussionsPage /></ProtectedRoute>} />
+        <Route path="/discussions/:slug" element={<ProtectedRoute><RoomPage /></ProtectedRoute>} />
         <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

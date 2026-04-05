@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import InvestmentProfile
+from .models import InvestmentProfile, LifeProfile
 
 User = get_user_model()
 
@@ -51,4 +51,29 @@ class InvestmentProfileSerializer(serializers.ModelSerializer):
         for s in value:
             if s not in allowed:
                 raise serializers.ValidationError(f"'{s}' is not a valid sector.")
+        return value
+
+
+class LifeProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LifeProfile
+        fields = (
+            'id', 'profession', 'employer', 'monthly_salary', 'years_of_experience',
+            'age', 'city', 'marital_status', 'family_members', 'dependents',
+            'monthly_expenses', 'existing_savings', 'existing_loans',
+            'life_goals', 'goals_detail', 'currency',
+            'updated_at', 'created_at',
+        )
+        read_only_fields = ('id', 'updated_at', 'created_at')
+
+    def validate_monthly_salary(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Monthly salary must be positive.")
+        return value
+
+    def validate_life_goals(self, value):
+        allowed = {'house', 'marriage', 'retirement', 'education', 'travel', 'business', 'emergency_fund', 'vehicle'}
+        for g in value:
+            if g not in allowed:
+                raise serializers.ValidationError(f"'{g}' is not a valid life goal.")
         return value

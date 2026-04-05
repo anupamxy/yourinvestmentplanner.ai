@@ -3,7 +3,7 @@ import { create } from 'zustand';
 const getInitial = () => {
   const saved = localStorage.getItem('theme');
   if (saved) return saved === 'dark';
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return true; // Default to dark mode
 };
 
 const apply = (dark) => {

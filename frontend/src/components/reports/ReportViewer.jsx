@@ -12,7 +12,7 @@ export default function ReportViewer({ report }) {
   return (
     <div className="space-y-4">
       {/* Meta bar */}
-      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+      <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--text-muted)]">
         <span className="flex items-center gap-1">
           <Calendar size={14} /> {date}
         </span>

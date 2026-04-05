@@ -22,10 +22,10 @@ export default function AgentRunPage() {
       <div className="max-w-2xl mx-auto space-y-6">
 
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+          <h1 className="text-2xl font-bold text-white">
             Investment Analysis
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-sm text-[var(--text-muted)] mt-1">
             4 AI agents work in sequence to deliver personalised market insights.
           </p>
         </div>
@@ -36,20 +36,20 @@ export default function AgentRunPage() {
               <div className={`${color} flex items-center gap-1.5 font-semibold text-xs`}>
                 <Icon size={14} /> {label}
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug">{desc}</p>
+              <p className="text-xs text-[var(--text-muted)] leading-snug">{desc}</p>
             </div>
           ))}
         </div>
 
         {!profile ? (
-          <div className="card border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950/40">
+          <div className="card border-orange-800/50 bg-orange-950/20">
             <div className="flex items-start gap-3">
               <AlertCircle size={20} className="text-orange-500 mt-0.5 shrink-0" />
               <div>
-                <p className="font-semibold text-orange-800 dark:text-orange-300">
+                <p className="font-semibold text-orange-300">
                   Investment profile required
                 </p>
-                <p className="text-sm text-orange-700 dark:text-orange-400 mt-1">
+                <p className="text-sm text-orange-400 mt-1">
                   Set your risk tolerance, sectors, and budget before running an analysis.
                 </p>
                 <Link to="/preferences" className="btn-primary inline-flex mt-3 text-sm py-1.5">
@@ -60,22 +60,21 @@ export default function AgentRunPage() {
           </div>
         ) : (
           <>
-            <div className="rounded-xl border border-slate-200 dark:border-slate-700
-                            bg-white dark:bg-slate-900 px-4 py-3
+            <div className="rounded-xl border border-white/[0.08] bg-black px-4 py-3
                             flex flex-wrap gap-x-5 gap-y-1.5 text-sm items-center">
-              <span className="text-slate-500 dark:text-slate-400">
-                Risk: <strong className="text-slate-800 dark:text-slate-200 capitalize">{profile.risk_tolerance}</strong>
+              <span className="text-[var(--text-muted)]">
+                Risk: <strong className="text-[var(--text-primary)] capitalize">{profile.risk_tolerance}</strong>
               </span>
-              <span className="text-slate-500 dark:text-slate-400">
-                Budget: <strong className="text-slate-800 dark:text-slate-200">${parseFloat(profile.budget).toLocaleString()} {profile.currency}</strong>
+              <span className="text-[var(--text-muted)]">
+                Budget: <strong className="text-[var(--text-primary)]">${parseFloat(profile.budget).toLocaleString()} {profile.currency}</strong>
               </span>
-              <span className="text-slate-500 dark:text-slate-400">
-                Horizon: <strong className="text-slate-800 dark:text-slate-200 capitalize">{profile.time_horizon}-term</strong>
+              <span className="text-[var(--text-muted)]">
+                Horizon: <strong className="text-[var(--text-primary)] capitalize">{profile.time_horizon}-term</strong>
               </span>
-              <span className="text-slate-500 dark:text-slate-400">
-                Sectors: <strong className="text-slate-800 dark:text-slate-200">{profile.sectors.map(s => s.replace('_', ' ')).join(', ')}</strong>
+              <span className="text-[var(--text-muted)]">
+                Sectors: <strong className="text-[var(--text-primary)]">{profile.sectors.map(s => s.replace('_', ' ')).join(', ')}</strong>
               </span>
-              <Link to="/preferences" className="ml-auto text-xs text-blue-500 hover:text-blue-700 dark:text-blue-400 underline underline-offset-2">
+              <Link to="/preferences" className="ml-auto text-xs text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">
                 Edit
               </Link>
             </div>

@@ -94,7 +94,7 @@ export default function AgentPipeline() {
           ${isDone     ? 'bg-green-50  dark:bg-green-950/40  border-green-200  dark:border-green-800'  : ''}
           ${isRunning  ? 'bg-blue-50   dark:bg-blue-950/40   border-blue-200   dark:border-blue-800'   : ''}
           ${isFailed   ? 'bg-red-50    dark:bg-red-950/40    border-red-200    dark:border-red-800'    : ''}
-          ${isCancelled? 'bg-slate-50  dark:bg-slate-800/60  border-slate-200  dark:border-slate-700' : ''}
+          ${isCancelled? 'bg-slate-50  dark:bg-[var(--bg-raised)]  border-slate-200  dark:border-white/[0.1]' : ''}
           ${isConflict ? 'bg-amber-50  dark:bg-amber-950/40  border-amber-200  dark:border-amber-800' : ''}
         `}>
           <span className="text-xl leading-none mt-0.5">{stage.emoji}</span>
@@ -103,7 +103,7 @@ export default function AgentPipeline() {
               ${isDone      ? 'text-green-800  dark:text-green-300'  : ''}
               ${isRunning   ? 'text-blue-800   dark:text-blue-300'   : ''}
               ${isFailed    ? 'text-red-800    dark:text-red-300'    : ''}
-              ${isCancelled ? 'text-slate-700  dark:text-slate-300'  : ''}
+              ${isCancelled ? 'text-slate-700  dark:text-[var(--text-secondary)]'  : ''}
               ${isConflict  ? 'text-amber-800  dark:text-amber-300'  : ''}
             `}>
               {stage.text}
@@ -148,7 +148,7 @@ export default function AgentPipeline() {
       {/* ── Progress bar ── */}
       {(isRunning || isDone) && (
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex justify-between text-xs text-[var(--text-muted)] dark:text-[var(--text-secondary)]">
             <span className="flex items-center gap-1">
               <Zap size={12} className="text-blue-500" />
               {isDone ? 'All agents completed' : `Agent ${completedCount + 1} of ${AGENTS.length} running`}
@@ -192,10 +192,10 @@ export default function AgentPipeline() {
 
       {/* ── Live SSE activity log ── */}
       {activityLog.length > 0 && (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700">
-            <Clock size={13} className="text-slate-400" />
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+        <div className="rounded-xl border border-slate-200 dark:border-white/[0.1] overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-[var(--bg-raised)] border-b border-slate-200 dark:border-white/[0.1]">
+            <Clock size={13} className="text-[var(--text-secondary)]" />
+            <span className="text-xs font-semibold text-[var(--text-muted)] dark:text-[var(--text-secondary)] uppercase tracking-wide">
               Activity Log
             </span>
             {isRunning && (
@@ -204,7 +204,7 @@ export default function AgentPipeline() {
           </div>
           <div className="px-4 py-3 space-y-1.5 max-h-36 overflow-y-auto">
             {activityLog.map((msg, i) => (
-              <p key={i} className="text-xs text-slate-600 dark:text-slate-400 animate-slide-up leading-relaxed">
+              <p key={i} className="text-xs text-[var(--text-muted)] dark:text-[var(--text-secondary)] animate-slide-up leading-relaxed">
                 {msg}
               </p>
             ))}

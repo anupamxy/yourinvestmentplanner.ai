@@ -82,14 +82,14 @@ export default function PreferencesForm({ onSaved }) {
               className={`py-2 px-3 rounded-lg border-2 text-sm font-medium capitalize transition-all ${
                 form.risk_tolerance === r
                   ? 'border-blue-600 bg-blue-50 text-blue-700'
-                  : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                  : 'border-gray-200 text-[var(--text-secondary)] hover:border-gray-300'
               }`}
             >
               {r}
             </button>
           ))}
         </div>
-        <p className="text-xs text-gray-400 mt-1">
+        <p className="text-xs text-[var(--text-muted)] mt-1">
           {form.risk_tolerance === 'conservative' && 'Stable, dividend-focused investments'}
           {form.risk_tolerance === 'moderate' && 'Balanced mix of growth and value stocks'}
           {form.risk_tolerance === 'aggressive' && 'High-growth, higher-volatility positions'}
@@ -98,7 +98,7 @@ export default function PreferencesForm({ onSaved }) {
 
       {/* Sectors */}
       <div>
-        <label className="label">Preferred Sectors <span className="text-gray-400 font-normal">(select all that apply)</span></label>
+        <label className="label">Preferred Sectors <span className="text-[var(--text-muted)] font-normal">(select all that apply)</span></label>
         <div className="flex flex-wrap gap-2">
           {SECTORS.map((s) => (
             <button
@@ -108,7 +108,7 @@ export default function PreferencesForm({ onSaved }) {
               className={`py-1.5 px-3 rounded-full text-sm font-medium border transition-all ${
                 form.sectors.includes(s.value)
                   ? 'bg-blue-600 border-blue-600 text-white'
-                  : 'bg-white border-gray-300 text-gray-600 hover:border-blue-400'
+                  : 'bg-white border-gray-300 text-[var(--text-secondary)] hover:border-blue-400'
               }`}
             >
               {s.label}
@@ -181,7 +181,7 @@ export default function PreferencesForm({ onSaved }) {
               className={`py-2 px-3 rounded-lg border-2 text-sm font-medium transition-all ${
                 form.time_horizon === h.value
                   ? 'border-blue-600 bg-blue-50 text-blue-700'
-                  : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                  : 'border-gray-200 text-[var(--text-secondary)] hover:border-gray-300'
               }`}
             >
               {h.label}

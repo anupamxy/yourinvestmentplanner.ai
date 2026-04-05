@@ -1,26 +1,77 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import Layout from '../components/layout/Layout';
-import PreferencesForm from '../components/preferences/PreferencesForm';
-import { Settings } from 'lucide-react';
+import PreferencesCanvas from '../components/preferences/PreferencesCanvas';
+import usePreferencesStore from '../store/usePreferencesStore';
 
 export default function PreferencesPage() {
   const navigate = useNavigate();
+  const { profile, saving, fetchProfile, saveProfile } = usePreferencesStore();
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => { fetchProfile(); }, []);
+
+  const handleSave = async (payload) => {
+    const ok = await saveProfile(payload);
+    if (ok) {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    }
+  };
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-blue-50 rounded-lg">
-            <Settings size={22} className="text-blue-600" />
-          </div>
+      <div className="flex flex-col h-[calc(100vh-4rem)]">
+
+        {/* Header */}
+        <div className="flex items-center justify-between pb-4 shrink-0">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Investment Preferences</h1>
-            <p className="text-sm text-gray-500">Tell the AI about your investment goals and risk tolerance</p>
+            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+              📈 Investment Preferences
+            </h1>
+            <p className="text-sm text-[var(--text-secondary)] mt-0.5">
+              Configure your risk, budget, sectors and goals — drag nodes to arrange
+            </p>
           </div>
+
+          {profile && (
+            <button
+              onClick={() => navigate('/run')}
+              className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl
+                         bg-gradient-to-r from-indigo-600 to-violet-600
+                         hover:from-indigo-500 hover:to-violet-500
+                         text-white shadow-md shadow-indigo-500/20 transition-all active:scale-95"
+            >
+              Run Analysis <ArrowRight size={15} />
+            </button>
+          )}
         </div>
 
-        <div className="card">
-          <PreferencesForm onSaved={() => setTimeout(() => navigate('/run'), 1000)} />
+        {/* Legend */}
+        <div className="flex flex-wrap gap-2 mb-3 shrink-0">
+          {[
+            { color: 'bg-amber-500',   label: 'Risk Tolerance' },
+            { color: 'bg-emerald-500', label: 'Budget' },
+            { color: 'bg-cyan-500',    label: 'Sectors' },
+            { color: 'bg-violet-500',  label: 'Goal' },
+            { color: 'bg-rose-500',    label: 'Time Horizon' },
+          ].map(({ color, label }) => (
+            <span key={label} className="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
+              <span className={`w-2 h-2 rounded-full ${color}`} />
+              {label}
+            </span>
+          ))}
+        </div>
+
+        {/* Canvas */}
+        <div className="flex-1 min-h-0">
+          <PreferencesCanvas
+            existingProfile={profile}
+            onSave={handleSave}
+            saving={saving}
+            saved={saved}
+          />
         </div>
       </div>
     </Layout>
